@@ -28,6 +28,12 @@ var InventoryCondition = function()
     this.condition = ko.observable();
     this.item = ko.observable();
 }
+var Answer = function()
+{
+    var self = this;
+    this.node = ko.observable();
+    this.msg = ko.observable();
+}
 var Node = function()
 {
 	var self = this;
@@ -43,6 +49,7 @@ var Node = function()
 	this.conditions = ko.observableArray();
 	this.inventoryConditions = ko.observableArray();
 	this.inventoryResults = ko.observableArray();
+	this.answers = ko.observableArray();
 
 	//this.x = ko.observable(128);
 	//this.y = ko.observable(128);
@@ -55,6 +62,13 @@ var Node = function()
 	this.checked = false;
 	this.selected = false;
 
+	this.addAnswer = function () {
+	    self.answers.push(new Answer());
+	}
+
+	this.removeAnswer = function (ans) {
+	    self.answers.remove(ans);
+	}
 	this.addInventoryResult = function () {
 	    self.inventoryResults.push(new InventoryResult())
 	}
@@ -391,34 +405,20 @@ var Node = function()
 	this.updateLinks = function()
 	{
 	    self.resetDoubleClick();
-	    
+	    //return;
 		// clear existing links
 		self.linkedTo.removeAll();
 
 		// find all the links
-		var links = self.body().match(/\[\[(.*?)\]\]/g);
+		var links = self.answers();
 		if (links != undefined)
 		{
-			var exists = {};
-			for (var i = links.length - 1; i >= 0; i --)
-			{
-				links[i] = links[i].substr(2, links[i].length - 4).toLowerCase();
-
-				if (links[i].indexOf("|") >= 0)
-					links[i] = links[i].split("|")[1];
-
-				if (exists[links[i]] != undefined)
-					links.splice(i, 1);
-				
-				exists[links[i]] = true;
-			}
-
 			// update links
 			for (var index in app.nodes())
 			{
 				var other = app.nodes()[index];
 				for (var i = 0; i < links.length; i ++)
-					if (other != self && other.title().toLowerCase() == links[i])
+					if (other != self && other.title().toLowerCase() == links[i].node().toLowerCase())
 						self.linkedTo.push(other);
 			}
 		}

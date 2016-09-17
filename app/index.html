@@ -162,6 +162,15 @@
                                      aceOptions: { mode: 'yarn' , theme: 'yarn' , showPrintMargin: false }">
                                 </div>
                             </div>
+                            <h4>Answers (Text | Node to link to)</h4>
+                            <div data-bind="foreach: app.editing().answers">
+                                <div class="one-answer">
+                                    <input data-bind='value: msg' />
+                                    <input data-bind='value: node' />
+                                    <div><a href='#' data-bind='click: app.editing().removeAnswer'>Delete</a></div>
+                                </div>
+                            </div>
+                            <button data-bind='click: app.editing().addAnswer'>Add Answer</button>
                         </div>
                     </div>
                     <div class="node-results">
