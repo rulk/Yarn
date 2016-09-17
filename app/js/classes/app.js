@@ -8,6 +8,14 @@ var App = function(name, version)
 	this.version = ko.observable(version);
 	this.editing = ko.observable(null);
 	this.deleting = ko.observable(null);
+
+	this.availablePresenters = ko.observableArray(['France', 'Germany', 'Spain']);
+	this.availableFractions = ko.observableArray(['Knights', 'Peasents', 'UN', 'Merlin']);
+	this.availableConditions = ko.observableArray(['more', 'less', '=']);
+	this.avaliableInventoryItems = ko.observableArray(['Lancelot', 'Gweeny', 'Eco-Activist']);
+	this.availableInventoryActions = ko.observableArray(['give', 'take']);
+	this.availableInventoryConditions = ko.observableArray(['present', 'absent']);
+
 	this.nodes = ko.observableArray([]);
 	this.cachedScale = 1;
 	this.canvas;

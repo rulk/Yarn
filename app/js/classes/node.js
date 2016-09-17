@@ -2,16 +2,48 @@ var globalNodeIndex = 0;
 const NodeExpandWidth = 300;
 const NodeExpandHeight = 150;
 const ClipNodeTextLength = 1024;
+var Result = function()
+{
+    var self = this;
+    this.amount = ko.observable(0);
+    this.fraction = ko.observable();
+}
 
+var Condition = function()
+{
+    var self = this;
+    this.value = ko.observable();
+    this.fraction = ko.observable();
+    this.condition = ko.observable();
+}
+var InventoryResult = function()
+{
+    var self = this;
+    this.action = ko.observable();
+    this.item = ko.observable();
+}
+var InventoryCondition = function()
+{
+    var self = this;
+    this.condition = ko.observable();
+    this.item = ko.observable();
+}
 var Node = function()
 {
 	var self = this;
 
+	
 	// primary values
 	this.index = ko.observable(globalNodeIndex++);
 	this.title = ko.observable("Node" + this.index());
 	this.tags = ko.observable("")
 	this.body = ko.observable("Empty Text");
+	this.presenter = ko.observable();
+	this.results = ko.observableArray();
+	this.conditions = ko.observableArray();
+	this.inventoryConditions = ko.observableArray();
+	this.inventoryResults = ko.observableArray();
+
 	//this.x = ko.observable(128);
 	//this.y = ko.observable(128);
 	this.active = ko.observable(true);
@@ -22,6 +54,61 @@ var Node = function()
 	this.colorID = ko.observable(0);
 	this.checked = false;
 	this.selected = false;
+
+	this.addInventoryResult = function () {
+	    self.inventoryResults.push(new InventoryResult())
+	}
+
+	this.removeInventoryResult = function (result) {
+	    self.inventoryResults.remove(result);
+	}
+
+
+	this.addInventoryCondition = function () {
+        self.inventoryConditions.push(new InventoryCondition())
+	}
+
+	this.removeInventoryCondition = function (cond) {
+	    self.inventoryConditions.remove(cond);
+	}
+
+	this.removeCondition = function (cond) {
+	    self.conditions.remove(cond)
+	};
+
+	this.addCondition = function () {
+	    self.conditions.push(new Condition());
+	};
+
+	this.removeResult = function (result) {
+	    self.results.remove(result)
+	};
+
+	this.addResult = function () {
+	    self.results.push(new Result());
+	};
+
+	this.combinedResults = ko.computed(function () {
+	    var output = "";
+	    $.each(self.results(), function (result) {
+	        output += "<span>"+this.fraction() +":"+(this.amount() > 0 ? "+": "" )+this.amount()+"</span>";
+	    });
+	    $.each(self.inventoryResults(), function (result) {
+	        output += "<span>" + this.action() + ":" + this.item() + "</span>";
+	    });
+	    return output;
+	});
+
+	this.combinedConditions = ko.computed(function () {
+	    var output = "";
+	    $.each(self.conditions(), function (cond) {
+	        output += "<span>" + this.fraction() + " " + this.condition() +" "+ this.value() + "</span>";
+	    });
+	    $.each(self.inventoryConditions(), function (cond) {
+	        output += "<span>" + this.condition() + ":" + this.item() + "</span>";
+	    });
+	    return output;
+	});
 
 	// clipped values for display
 	this.clippedTags = ko.computed(function() 
@@ -303,7 +390,8 @@ var Node = function()
 
 	this.updateLinks = function()
 	{
-		self.resetDoubleClick();
+	    self.resetDoubleClick();
+	    
 		// clear existing links
 		self.linkedTo.removeAll();
 

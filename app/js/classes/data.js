@@ -32,7 +32,12 @@ var data =
 		}
 		else
 		{
-			alert("Unable to load file from your browser");
+		    //alert("Unable to load file from your browser");
+		    $.get("/test.json", function (txtData) {
+		        data.editingPath("test.json");
+		        data.editingType(FILETYPE.JSON);
+		        data.loadData(txtData, FILETYPE.JSON, clearNodes);
+		    });
 		}
 		/*
 		else if (window.File && window.FileReader && window.FileList && window.Blob && e.target && e.target.files && e.target.files.length > 0)
@@ -52,8 +57,8 @@ var data =
 				}
 			}
 			reader.readAsText(e.target.files[0], "UTF-8");
-		}
-		*/
+		}*/
+		
 	},
 
 	openFile: function(e, filename)
@@ -120,7 +125,7 @@ var data =
 		var i = 0;
 		if (type == FILETYPE.JSON)
 		{
-			content = JSON.parse(content);
+			//content = JSON.parse(content);
 			for (i = 0; i < content.length; i ++)
 				objects.push(content[i]);
 		}
@@ -257,7 +262,22 @@ var data =
 			if (object.body != undefined)
 				node.body(object.body);
 			if (object.tags != undefined)
-				node.tags(object.tags);
+			    node.tags(object.tags);
+			if (object.presenter != undefined)
+			{
+			    node.presenter(object.presenter);
+			}
+			if (object.results != undefined)
+			{
+			    for (var r = 0; r < object.results.length; r++)
+			    {
+			        var res = new Result();
+			        res.fraction(object.results[r].fraction);
+			        res.amount(object.results[r].amount);
+			        node.results.push(res);
+			    }
+			   
+			}
 			if (object.position != undefined && object.position.x != undefined)
 			{
 				node.x(object.position.x);
@@ -294,6 +314,8 @@ var data =
 				"title": nodes[i].title(), 
 				"tags": nodes[i].tags(), 
 				"body": nodes[i].body(),
+				"results": ko.toJS(nodes[i].results),
+                "presenter" :nodes[i].presenter(),
 				"position": { "x": nodes[i].x(), "y": nodes[i].y() },
 				"colorID": nodes[i].colorID()
 			});

@@ -4,6 +4,9 @@
 		<div class="title" data-bind="text: node.title"></div>
 		<div class="body" data-bind="html: node.clippedBody"></div>
 		<div class="tags" data-bind="html: node.clippedTags"></div>
+        
+        <div class="tags results" data-bind="html: node.combinedResults"></div>
+
 		<div class="icon edit" data-bind="click: function() { app.editNode(node); }"></div>
 		<div class="icon delete" data-bind="click:node.remove"></div>
 	</div>

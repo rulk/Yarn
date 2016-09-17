@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -99,9 +99,11 @@
 						node.colorID() == 5 ? '#C47862' :
 						node.colorID() == 6 ? '#97E1E9' :
 						'#eee'}"></div>
-						<div class="body" data-bind="html: node.clippedBody"></div>
-						<div class="tags" data-bind="html: node.clippedTags"></div>
-						<div class="icon colorDown" data-bind="click: node.cycleColorDown"></div>
+                        <div class="conditions" data-bind="html: node.combinedConditions"></div>
+						<div class="results" data-bind="html: node.combinedResults"></div>
+                        <div class="body" data-bind="html: node.clippedBody"></div>
+
+                        <div class="icon colorDown" data-bind="click: node.cycleColorDown"></div>
 						<div class="icon colorUp" data-bind="click: node.cycleColorUp"></div>
 						<!--<div class="icon edit" data-bind="click: function() { app.editNode(node); }"></div>-->
 						<div class="icon delete" data-bind="click: node.tryRemove"></div>
@@ -114,17 +116,90 @@
 			<div class="node-editor" data-bind="mousedown:app.saveNode">
 
 				<div class="form" data-bind="preventBubble: 'click', preventBubble: 'mousedown'">
-					<input type="text" class="title" data-bind="value: app.editing().title">
-					<input type="text" data-bind="value: app.editing().tags">
-					<div class="editor-container">
-						<div class="editor" id="editor"
-							data-bind="
-							ace: app.editing().body, 
-							aceOptions: { mode: 'yarn', theme: 'yarn', showPrintMargin: false }">
-						</div> 
-					</div>
-					<!--<div class="icon close" data-bind="click:app.saveNode"></div>-->
-				</div>
+                    
+                    <div class="node-conditions">
+                        <h4>Conditions:</h4>                        
+                        <div id='conditionsList'>
+                           
+                                <div data-bind="foreach: app.editing().conditions">
+                                    <div class="one-condition">
+                                        <select id="fraction" data-bind="options:  app.availableFractions, value: fraction, optionsCaption: 'Choose...'"></select>
+                                        <select id="type" data-bind="options:  app.availableConditions, value: condition, optionsCaption: 'Choose...'"></select>
+                                        <input data-bind='value: value' />
+                                        <div><a href='#' data-bind='click: app.editing().removeCondition'>Delete</a></div>                                       
+                                    </div>
+                                </div>
+                            
+                        </div>
+                        <button data-bind='click: app.editing().addCondition'>Add Condition</button>
+                        <h4>Inventory:</h4>   
+                        <div id='inventoryConditions'>
+                            
+                                <div data-bind="foreach: app.editing().inventoryConditions">
+                                    <div class="one-condition">
+                                        <select id="condition" data-bind="options:  app.availableInventoryConditions, value: condition, optionsCaption: 'Choose...'"></select>
+                                        <select id="item" data-bind="options:  app.avaliableInventoryItems, value: item, optionsCaption: 'Choose...'"></select>
+                                        <div><a href='#' data-bind='click: app.editing().removeInventoryCondition'>Delete</a></div>
+                                    </div>
+                               </div>
+                           
+                        </div>
+                        <button data-bind='click: app.editing().addInventoryCondition'>Add Inventory Condition</button>
+                    </div>
+
+                    <div class="node-content">
+                        <div class="node-content-internal">
+                            <label for="title">Title:</label>
+                            <input name="title" type="text" class="title" data-bind="value: app.editing().title">
+                            <label for="tags">Tags:</label>
+                            <input name="tags" type="text" data-bind="value: app.editing().tags">
+                            <label for="presenter">Presenter:</label>
+                            <select id="presenter" data-bind="options:  app.availablePresenters, value: app.editing().presenter, optionsCaption: 'Choose...'"></select>
+                            <div class="editor-container">
+                                <div class="editor" id="editor"
+                                     data-bind="
+                                     ace: app.editing().body,
+                                     aceOptions: { mode: 'yarn' , theme: 'yarn' , showPrintMargin: false }">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="node-results">
+                        <h4>Results:</h4>
+                        <div id='contactsList'>
+                           
+                                <div data-bind="foreach: app.editing().results">
+                                    <div class="one-result">
+                                        <select id="fraction" data-bind="options:  app.availableFractions, value: fraction, optionsCaption: 'Choose...'"></select>
+
+                                        <input data-bind='value: amount' />
+                                        <div><a href='#' data-bind='click: app.editing().removeResult'>Delete</a></div>
+                                    </div>
+                                </div>
+                            
+                        </div>
+                        <button data-bind='click: app.editing().addResult'>Add a result</button>
+                        <h4>Inventory Results:</h4>
+                        <div id='inventoryResults'>
+                            
+                                <div data-bind="foreach: app.editing().inventoryResults">
+                                    <div class="one-result">
+                                         <select id="condition" data-bind="options:  app.availableInventoryActions, value: action, optionsCaption: 'Choose...'"></select>
+                                          
+                                            <select id="item" data-bind="options:  app.avaliableInventoryItems, value: item, optionsCaption: 'Choose...'"></select>
+                                        
+                                        <div><a href='#' data-bind='click: app.editing().removeInventoryResult'>Delete</a></div>
+
+                                    </div>
+                                </div>
+                         
+                        </div>
+                        <button data-bind='click: app.editing().addInventoryResult'>Add a inventory Result</button>
+                        </div>
+
+                       
+                        <!--<div class="icon close" data-bind="click:app.saveNode"></div>-->
+                    </div>
 
 			</div>
 			<!-- /ko -->

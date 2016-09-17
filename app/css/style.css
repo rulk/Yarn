@@ -296,6 +296,7 @@ a:hover { color: #000;}
 	border-top: 1px solid #fff;
 	cursor: pointer;
 	transition: border 0.25s;
+    overflow:hidden;
 }
 
 .node:hover
@@ -320,11 +321,10 @@ a:hover { color: #000;}
 
 .node .body
 {
-	position: absolute;
+	
 	box-sizing: border-box;
-	top: 40px;
+	
 	width: 100%;
-	height: calc(100% - 48px);
 	padding: 8px 8px 8px 8px;
 	font-size: 0.8em;
 	overflow: hidden;
@@ -357,7 +357,7 @@ a:hover { color: #000;}
 	overflow: hidden;
 }
 
-.node .tags span
+.node .tags span, .conditions span, .results span
 {
 	padding: 4px 8px 4px 8px;
 	margin: 4px 4px 0px 0px;
@@ -365,6 +365,7 @@ a:hover { color: #000;}
 	background: #e4dbcb;
 	color: #978e7e;
 	border-radius: 4px;
+    text-wrap:avoid;
 }
 
 .node .edit, .node .delete, .node .colorUp, .node .colorDown
@@ -465,15 +466,14 @@ a:hover { color: #000;}
 {
 	margin-top: 20px;
 	width: 100%;
-	height: calc(100% - 120px);
-	float: left;
+    min-height:200px;
 }
 
 .node-editor .form .editor
 {
 	white-space: pre;
 	box-sizing: border-box;
-	min-height: 100%;
+	min-height: 200px;
 	padding: 0;
 	margin: 0;
 	font-size: 1.1em;
@@ -569,4 +569,47 @@ a:hover { color: #000;}
 		float: right;
 		margin-top: 20px;
 	}
+}
+
+
+label {
+   
+    font-weight: bold;
+    display: block;
+    width: 150px;
+}
+.node-conditions, .node-results
+{
+    width:20%;
+    display:block;
+    float:left;
+}
+.node-content
+{
+    width:60%;
+    display:block;
+    float:left;
+}
+.node-content-internal{
+    padding-left:20px;
+    padding-right:20px;
+}
+.one-condition
+{
+    margin-top:10px;
+    background-color:lightblue;
+}
+
+.one-result
+{
+    margin-top:10px;
+    background-color:lightgreen;
+}
+.conditions
+{
+    background-color:lightblue;
+}
+.results
+{
+    background-color:lightgreen;
 }
