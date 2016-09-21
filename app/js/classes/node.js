@@ -31,8 +31,8 @@ var InventoryCondition = function()
 var Answer = function()
 {
     var self = this;
-    this.node = ko.observable();
     this.msg = ko.observable();
+    this.ref = ko.observable();
 }
 var Node = function()
 {
@@ -418,7 +418,7 @@ var Node = function()
 			{
 				var other = app.nodes()[index];
 				for (var i = 0; i < links.length; i ++)
-					if (other != self && other.title().toLowerCase() == links[i].node().toLowerCase())
+					if (other != self && other.title().toLowerCase() == links[i].ref().toLowerCase())
 						self.linkedTo.push(other);
 			}
 		}

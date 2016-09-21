@@ -125,7 +125,7 @@
                                     <div class="one-condition">
                                         <select id="fraction" data-bind="options:  app.availableFractions, value: fraction, optionsCaption: 'Choose...'"></select>
                                         <select id="type" data-bind="options:  app.availableConditions, value: condition, optionsCaption: 'Choose...'"></select>
-                                        <input data-bind='value: value' />
+                                        <input data-bind='value: value,  valueUpdate: ["afterkeydown","input"]' />
                                         <div><a href='#' data-bind='click: app.editing().removeCondition'>Delete</a></div>                                       
                                     </div>
                                 </div>
@@ -165,8 +165,8 @@
                             <h4>Answers (Text | Node to link to)</h4>
                             <div data-bind="foreach: app.editing().answers">
                                 <div class="one-answer">
-                                    <input data-bind='value: msg' />
-                                    <input data-bind='value: node' />
+                                    <input data-bind='value: msg ,  valueUpdate: ["afterkeydown","input"]' />
+                                    <input data-bind='value: ref,  valueUpdate: ["afterkeydown","input"]' />
                                     <div><a href='#' data-bind='click: app.editing().removeAnswer'>Delete</a></div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
                                     <div class="one-result">
                                         <select id="fraction" data-bind="options:  app.availableFractions, value: fraction, optionsCaption: 'Choose...'"></select>
 
-                                        <input data-bind='value: amount' />
+                                        <input data-bind='value: amount,  valueUpdate: ["afterkeydown","input"]' />
                                         <div><a href='#' data-bind='click: app.editing().removeResult'>Delete</a></div>
                                     </div>
                                 </div>

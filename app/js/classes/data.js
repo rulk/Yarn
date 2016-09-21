@@ -278,6 +278,41 @@ var data =
 			    }
 			   
 			}
+			if (object.conditions != undefined) {
+			    for (var c = 0; c < object.conditions.length; c++) {
+			        var cond = new Condition();
+			        cond.fraction(object.conditions[c].fraction);
+			        cond.value(object.conditions[c].value);
+			        cond.condition(object.conditions[c].condition);
+			        node.conditions.push(cond);
+			    }
+
+			}
+			if (object.inventoryResults != undefined) {
+			    for (var r = 0; r < object.inventoryResults.length; r++) {
+			        var res = new InventoryResult();
+			        res.action(object.inventoryResults[r].action);
+			        res.item(object.inventoryResults[r].item);
+			        node.inventoryResults.push(res);
+			    }
+
+			}
+			if (object.inventoryConditions != undefined) {
+			    for (var c = 0; c < object.inventoryConditions.length; c++) {
+			        var cond = new InventoryCondition();
+			        cond.condition(object.inventoryConditions[c].condition);
+			        cond.item(object.inventoryConditions[c].item);			       
+			        node.inventoryConditions.push(cond);
+			    }
+			}
+			if (object.answers != undefined) {
+			    for (var c = 0; c < object.answers.length; c++) {
+			        var answer = new Answer();
+			        answer.node(object.answers[c].node);
+			        answer.ref(object.answers[c].ref);
+			        node.answers.push(answer);
+			    }
+			}
 			if (object.position != undefined && object.position.x != undefined)
 			{
 				node.x(object.position.x);
@@ -315,6 +350,10 @@ var data =
 				"tags": nodes[i].tags(), 
 				"body": nodes[i].body(),
 				"results": ko.toJS(nodes[i].results),
+				"conditions": ko.toJS(nodes[i].conditions),
+				"inventoryConditions": ko.toJS(nodes[i].inventoryConditions),
+				"inventoryResults": ko.toJS(nodes[i].inventoryResults),
+				"answers": ko.toJS(nodes[i].answers),
                 "presenter" :nodes[i].presenter(),
 				"position": { "x": nodes[i].x(), "y": nodes[i].y() },
 				"colorID": nodes[i].colorID()
