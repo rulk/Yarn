@@ -417,9 +417,11 @@ var Node = function()
 			for (var index in app.nodes())
 			{
 				var other = app.nodes()[index];
-				for (var i = 0; i < links.length; i ++)
-					if (other != self && other.title().toLowerCase() == links[i].ref().toLowerCase())
-						self.linkedTo.push(other);
+				for (var i = 0; i < links.length; i++) {
+				    if (links[i].ref() == undefined || links[i].ref() == null || links[i].ref() == "") continue;
+				    if (other != self && other.title().toLowerCase() == links[i].ref().toLowerCase())
+				        self.linkedTo.push(other);
+				}
 			}
 		}
 	}

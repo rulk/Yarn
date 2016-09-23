@@ -129,6 +129,30 @@ a:hover { color: #000;}
 	cursor: pointer;
 }
 
+.file-list
+{
+    position:absolute;
+    top:80px;
+    z-index:100;
+    right:20px;
+    width: 290px;
+    float: left;
+    display: inline;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+	font-size: 0.9em;
+	color: #666;
+	text-transform: uppercase;
+	background: #fff;
+	cursor: pointer;
+
+}
+.fileItem
+{
+    float:none;
+    display:block;
+    padding:10px;
+}
+
 .app-menu .menu:first-child {
 	margin-left: 0;
 }
@@ -162,7 +186,7 @@ a:hover { color: #000;}
 	padding: 10px;
 }
 
-.app-menu .dropdown .item:hover
+.app-menu .dropdown .item:hover, .fileItem:hover
 {
 	background: #eee;
 	color: #000;
@@ -180,7 +204,7 @@ a:hover { color: #000;}
 
 /* --- NODE SEARCH--- */
 
-.app-search
+.app-search, .drive-save
 {
 	position: absolute;
 	top: 20px;
@@ -197,6 +221,7 @@ a:hover { color: #000;}
 .app-search .search-field { margin-left: 0px; margin-right: 0px; }
 .app-search input[type="checkbox"] { cursor: pointer; }
 
+.save-field { padding: 4px 8px 4px 8px; font-family: "Lucida Console", Monaco, monospace; margin-left: 10px; margin-right: 8px; }
 /* --- ZOOM --- */
 
 .app-zoom

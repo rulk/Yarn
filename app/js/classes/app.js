@@ -9,12 +9,14 @@ var App = function(name, version)
 	this.editing = ko.observable(null);
 	this.deleting = ko.observable(null);
 
-	this.availablePresenters = ko.observableArray(['France', 'Germany', 'Spain']);
+	this.availablePresenters = ko.observableArray(['Knight', 'Peasent', 'UN','Merlin']);
 	this.availableFractions = ko.observableArray(['Knights', 'Peasents', 'UN', 'Merlin']);
 	this.availableConditions = ko.observableArray(['more', 'less', '=']);
 	this.avaliableInventoryItems = ko.observableArray(['Lancelot', 'Gweeny', 'Eco-Activist']);
 	this.availableInventoryActions = ko.observableArray(['give', 'take']);
 	this.availableInventoryConditions = ko.observableArray(['present', 'absent']);
+
+	this.avaliableFiles = ko.observableArray();
 
 	this.nodes = ko.observableArray([]);
 	this.cachedScale = 1;
@@ -37,7 +39,7 @@ var App = function(name, version)
 	this.nodeSelection = [];
 
 	this.$searchField = $(".search-field");
-
+	this.$saveField = $(".save-field");
 	// node-webkit
 	if (typeof(require) == "function")
 	{
@@ -49,7 +51,7 @@ var App = function(name, version)
 	{
 		//TODO(Al):
 		// delete mutliple nodes at the same time
-
+	    self.hideFileList();
 		var osName = "Unknown OS";
 		if (navigator.platform.indexOf("Win")!=-1) osName="Windows";
 		if (navigator.platform.indexOf("Mac")!=-1) osName="MacOS";
@@ -353,7 +355,7 @@ var App = function(name, version)
 		});
 
 		$(document).on('keydown', function(e) {
-			if (self.editing() || self.$searchField.is(':focus')) return;
+		    if (self.editing() || self.$searchField.is(':focus') || self.$saveField.is(':focus')) return;
 
 			var scale = self.cachedScale || 1,
 				movement = scale * 500;
@@ -1117,5 +1119,21 @@ var App = function(name, version)
 	{
 		self.$searchField.val("");
 		self.updateSearch();
+	}
+
+	this.showFileList = function()
+	{
+	    $(".file-list").show();
+	    loadFileList(function (data) {
+	        self.avaliableFiles.removeAll();
+	        for (var i = 0; i < data.length ; i++) {
+	            self.avaliableFiles.push(data[i]);
+	        }
+
+	    });
+	}
+	this.hideFileList = function()
+	{
+	    $(".file-list").hide();
 	}
 }

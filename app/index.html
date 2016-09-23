@@ -5,6 +5,7 @@
 		<title>Yarn</title>
 		<link rel="stylesheet" href="css/normalize.css">
 		<link rel="stylesheet" href="css/style.css">
+       
 
 		<!-- libraries -->
 		<script type="text/javascript" src="js/libs/jquery-1.11.2.min.js"></script>
@@ -23,6 +24,10 @@
 		<script type="text/javascript" src="js/classes/data.js"></script>
 		<script type="text/javascript" src="js/classes/utils.js"></script>
 		<script type="text/javascript" src="js/classes/node.js"></script>
+        <script type="text/javascript" src="js/classes/gdrive.js"></script>
+      
+        <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+        
 	</head>
 	<body>
 
@@ -33,13 +38,25 @@
 		<div id="app">
 
 			<!-- search form -->
-			<div class="app-search">
-				<input type="text" class="search-field"/>
+			<div class="app-search" style="display:none;">
+				<input type="text" class="search-field" enabled="false" />
+
 				<span class="search-title"><input type="checkbox" checked="checked"> Title</span>
 				<span class="search-body"><input type="checkbox"> Body</span>
 				<span class="search-tags"><input type="checkbox"> Tags</span>
+			
 			</div>
+            <div class="drive-save" >
+                <input type="text" id="drive-file-name" placeholder="File Name" class="save-field" data-bind="value: data.editingPath, disable: data.editingFileId() != null" />
+                <input type="button" id="doitButton" style="display: none" value="SAVE TO DRIVE"  data-bind="click: function() { data.trySave(true); }"/>
+                <input type="button" id="authorizeButton" style="display: none" value="AUTHORIZE IN DRIVE" />
+            </div>
 
+            <div class="file-list">
+                <div class="item " data-bind="foreach: app.avaliableFiles">
+                    <span class="app-title fileItem" data-bind="text: title, click: function() { loadFromGDrive(id, title,url); }"></span>
+                </div>
+            </div>
 			<!-- zoom controls -->
 			<!--
 			<div class="app-zoom">
@@ -60,9 +77,14 @@
 
 			<!-- navigation / menu -->
 			<div class="app-menu">
+
 				<div class="menu">
 					<span class="title" data-bind="click:app.newNode">+ Node</span>
 				</div>
+                
+                <div class="menu">
+                    <span class="title" data-bind="click:app.showFileList">Drive Files</span>
+                </div>
 
 				<div class="menu">
 					<span class="title">File</span>
@@ -73,10 +95,7 @@
 						<!-- ko if:data.editingPath() != null -->
 						<span class="item" data-bind="click: data.trySaveCurrent">Save</span>
 						<!-- /ko -->
-						<span class="item" data-bind="click: function() { data.trySave(FILETYPE.JSON); }">Save As Json...</span>
-						<span class="item" data-bind="click: function() { data.trySave(FILETYPE.YARNTEXT); }">Save As Yarn...</span>
-						<span class="item" data-bind="click: function() { data.trySave(FILETYPE.TWEE); }">Save As Twee...</span>
-						<span class="item" data-bind="click: function() { data.trySave(FILETYPE.XML); }">Save As Xml...</span>
+						<span class="item" data-bind="click: function() { data.trySave(false); }">Save As Json...</span>
 						<!--<span class="item" data-bind="click: app.quit">Close</span>-->
 					</div>
 				</div>
@@ -166,7 +185,10 @@
                             <div data-bind="foreach: app.editing().answers">
                                 <div class="one-answer">
                                     <input data-bind='value: msg ,  valueUpdate: ["afterkeydown","input"]' />
-                                    <input data-bind='value: ref,  valueUpdate: ["afterkeydown","input"]' />
+                                   <!-- <input data-bind='value: ref,  valueUpdate: ["afterkeydown","input"]' />-->
+                                    <select data-bind="options: app.nodes, optionsText: 'title', value: ref, optionsCaption: '', optionsValue: 'title'">
+
+                                    </select>
                                     <div><a href='#' data-bind='click: app.editing().removeAnswer'>Delete</a></div>
                                 </div>
                             </div>

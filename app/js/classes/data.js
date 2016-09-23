@@ -2,7 +2,8 @@ var FILETYPE = { JSON: "json", XML: "xml", TWEE: "twee", UNKNOWN: "none", YARNTE
 
 var data =
 {
-	editingPath: ko.observable(null),
+    editingPath: ko.observable(null),
+    editingFileId : ko.observable(null),
 	editingType: ko.observable(""),
 	editingFolder: ko.observable(null),
 
@@ -125,7 +126,7 @@ var data =
 		var i = 0;
 		if (type == FILETYPE.JSON)
 		{
-			//content = JSON.parse(content);
+			content = JSON.parse(content);
 			for (i = 0; i < content.length; i ++)
 				objects.push(content[i]);
 		}
@@ -308,7 +309,7 @@ var data =
 			if (object.answers != undefined) {
 			    for (var c = 0; c < object.answers.length; c++) {
 			        var answer = new Answer();
-			        answer.node(object.answers[c].node);
+			        answer.msg(object.answers[c].msg);
 			        answer.ref(object.answers[c].ref);
 			        node.answers.push(answer);
 			    }
@@ -494,10 +495,18 @@ var data =
 		data.openFileDialog($('#open-file'), data.appendFile);
 	},
 
-	trySave: function(type)
+	trySave: function(toDrive)
 	{
-		data.editingType(type);
-		data.saveFileDialog($('#save-file'), type, data.getSaveData(type));
+	    var type = FILETYPE.JSON;
+	    data.editingType(type);
+	    if (!toDrive)
+	    {
+	        data.saveFileDialog($('#save-file'), type, data.getSaveData(type));
+	    }
+	    else
+	    {
+	        saveFileToDrive(data.getSaveData(type));
+	    }
 	},
 
 	trySaveCurrent: function()
