@@ -85,6 +85,10 @@
                 <div class="menu">
                     <span class="title" data-bind="click:app.showFileList">Drive Files</span>
                 </div>
+                
+                <div class="menu">
+                    <span class="title" data-bind="click:app.Play">Play</span>
+                </div>
 
 				<div class="menu">
 					<span class="title">File</span>
@@ -176,9 +180,7 @@
                             <select id="presenter" data-bind="options:  app.availablePresenters, value: app.editing().presenter, optionsCaption: 'Choose...'"></select>
                             <div class="editor-container">
                                 <div class="editor" id="editor"
-                                     data-bind="
-                                     ace: app.editing().body,
-                                     aceOptions: { mode: 'yarn' , theme: 'yarn' , showPrintMargin: false }">
+                                     data-bind=" ace: app.editing().body, aceOptions: { mode:'yarn',  theme: 'solarized_light', showPrintMargin: false, wrap:true }">
                                 </div>
                             </div>
                             <h4>Answers (Text | Node to link to)</h4>
@@ -275,6 +277,12 @@
 		<!-- templates container (they get loaded into this) -->
 		<div class="templates">
 		</div>
+   
+
+        <div id="player" style="display:none">
+            <div class="close-player" onclick="$('#player').hide();">Close</div>
+            
+        </div>
 
 		<!-- start it all up! -->
 		<script type="text/javascript">

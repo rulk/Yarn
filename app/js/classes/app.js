@@ -52,6 +52,7 @@ var App = function(name, version)
 		//TODO(Al):
 		// delete mutliple nodes at the same time
 	    self.hideFileList();
+	    self.loadData();
 		var osName = "Unknown OS";
 		if (navigator.platform.indexOf("Win")!=-1) osName="Windows";
 		if (navigator.platform.indexOf("Mac")!=-1) osName="MacOS";
@@ -1135,5 +1136,37 @@ var App = function(name, version)
 	this.hideFileList = function()
 	{
 	    $(".file-list").hide();
+	}
+
+	this.Play = function()
+	{
+	    var content = data.getSaveData(FILETYPE.JSON);
+	    $("#player").show();
+	    if (!$("#appframe").length)
+	    {
+	        $("#player").append("<iframe src='client/index.html' id='appframe' ></iframe>");
+	        $("#appframe").on("load", function () {
+	            window.setTimeout(function () {
+	                $("#appframe")[0].contentWindow.PlayFromEditor(content);
+	            }, 2000);
+	        });
+	    }
+	    else
+	    {
+	        $("#appframe")[0].contentWindow.PlayFromEditor(content);
+	    }
+	   
+	   
+	}
+
+	this.loadData = function () {
+	    $.getJSON('client/game-data/static-model/presenters.json', function (data) {
+
+	        self.availablePresenters.removeAll();
+
+	        $.each(data, function (key, value) {
+	            self.availablePresenters.push(key);
+	        });
+	    });
 	}
 }

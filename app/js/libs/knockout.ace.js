@@ -19,6 +19,7 @@
 
             if ( options.theme ) editor.setTheme("ace/theme/" + options.theme);
             if ( options.mode ) editor.getSession().setMode("ace/mode/" + options.mode);
+            if (options.wrap) editor.getSession().setUseWrapMode(true);
 
             editor.setValue(value);
             editor.gotoLine( 0 );
