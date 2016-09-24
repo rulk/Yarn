@@ -264,6 +264,10 @@ var data =
 				node.body(object.body);
 			if (object.tags != undefined)
 			    node.tags(object.tags);
+			if (object.attitudeName != undefined)
+			    node.attitudeName(object.attitudeName);
+			if (object.attitudeValue != undefined)
+			    node.attitudeValue(object.attitudeValue);
 			if (object.presenter != undefined)
 			{
 			    node.presenter(object.presenter);
@@ -355,7 +359,9 @@ var data =
 				"inventoryConditions": ko.toJS(nodes[i].inventoryConditions),
 				"inventoryResults": ko.toJS(nodes[i].inventoryResults),
 				"answers": ko.toJS(nodes[i].answers),
-                "presenter" :nodes[i].presenter(),
+				"presenter": nodes[i].presenter(),
+				"attitudeName": nodes[i].attitudeName(),
+				"attitudeValue": nodes[i].attitudeValue(),
 				"position": { "x": nodes[i].x(), "y": nodes[i].y() },
 				"colorID": nodes[i].colorID()
 			});

@@ -1,3 +1,13 @@
+ko.subscribable.fn.subscribeChanged = function (callback) {
+    var oldValue;
+    this.subscribe(function (_oldValue) {
+        oldValue = _oldValue;
+    }, this, 'beforeChange');
+
+    this.subscribe(function (newValue) {
+        callback(newValue, oldValue);
+    });
+};
 var globalNodeIndex = 0;
 const NodeExpandWidth = 300;
 const NodeExpandHeight = 150;
@@ -34,11 +44,13 @@ var Answer = function()
     this.msg = ko.observable();
     this.ref = ko.observable();
 }
+var NodeRename = ko.observable();
 var Node = function()
 {
 	var self = this;
 
 	
+
 	// primary values
 	this.index = ko.observable(globalNodeIndex++);
 	this.title = ko.observable("Node" + this.index());
@@ -49,7 +61,21 @@ var Node = function()
 	this.conditions = ko.observableArray();
 	this.inventoryConditions = ko.observableArray();
 	this.inventoryResults = ko.observableArray();
+	this.attitudeName = ko.observable();
+	this.attitudeValue = ko.observable();
 	this.answers = ko.observableArray();
+
+	NodeRename.subscribe(function (change) {
+	    for (var i = 0; i < self.answers().length; i++) {
+	        if (self.answers()[i].ref() == change.prevName) {
+	            self.answers()[i].ref(change.newName);
+	        }
+	    }
+
+	});
+	this.title.subscribeChanged(function (newValue, oldValue) {
+	    NodeRename({ prevName: oldValue, newName: newValue });
+	});
 
 	//this.x = ko.observable(128);
 	//this.y = ko.observable(128);
@@ -104,6 +130,9 @@ var Node = function()
 
 	this.combinedResults = ko.computed(function () {
 	    var output = "";
+	    if (self.attitudeName() != null && self.attitudeName() != 'None' && self.attitudeName() != undefined) {
+	        output += "<span>" + self.attitudeName() + ":" + self.attitudeValue() + "</span>";
+	    }
 	    $.each(self.results(), function (result) {
 	        output += "<span>"+this.fraction() +":"+(this.amount() > 0 ? "+": "" )+this.amount()+"</span>";
 	    });

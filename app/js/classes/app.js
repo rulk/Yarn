@@ -9,12 +9,14 @@ var App = function(name, version)
 	this.editing = ko.observable(null);
 	this.deleting = ko.observable(null);
 
-	this.availablePresenters = ko.observableArray(['Knight', 'Peasent', 'UN','Merlin']);
-	this.availableFractions = ko.observableArray(['Knights', 'Peasents', 'UN', 'Merlin']);
+	this.availablePresenters = ko.observableArray(['Knight', 'Peasant', 'UN', 'Merlin']);
+	this.availableFractions = ko.observableArray(['Knights', 'Peasants', 'UN', 'Merlin']);
 	this.availableConditions = ko.observableArray(['more', 'less', '=']);
 	this.avaliableInventoryItems = ko.observableArray(['Lancelot', 'Gweeny', 'Eco-Activist']);
 	this.availableInventoryActions = ko.observableArray(['give', 'take']);
 	this.availableInventoryConditions = ko.observableArray(['present', 'absent']);
+	this.avaliableAttitudes = ko.observableArray();
+
 
 	this.avaliableFiles = ko.observableArray();
 
@@ -1166,6 +1168,23 @@ var App = function(name, version)
 
 	        $.each(data, function (key, value) {
 	            self.availablePresenters.push(key);
+	        });
+	    });
+
+	    $.getJSON('client/game-data/static-model/attitudes.json', function (data) {
+
+	        self.avaliableAttitudes.removeAll();
+
+	        $.each(data, function (key, value) {
+	            self.avaliableAttitudes.push(key);
+	        });
+	    });
+	    $.getJSON('client/game-data/static-model/fractions.json', function (data) {
+
+	        self.availableFractions.removeAll();
+
+	        $.each(data, function (key, value) {
+	            self.availableFractions.push(key);
 	        });
 	    });
 	}

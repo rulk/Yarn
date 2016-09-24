@@ -199,8 +199,11 @@
                     </div>
                     <div class="node-results">
                         <h4>Results:</h4>
+                        <select data-bind="options:  app.avaliableAttitudes, value: app.editing().attitudeName, optionsCaption: 'None'"></select>
+                        <input data-bind='value: app.editing().attitudeValue,  valueUpdate: ["afterkeydown","input"]' />
+
                         <div id='contactsList'>
-                           
+                                
                                 <div data-bind="foreach: app.editing().results">
                                     <div class="one-result">
                                         <select id="fraction" data-bind="options:  app.availableFractions, value: fraction, optionsCaption: 'Choose...'"></select>
