@@ -1,5 +1,14 @@
 ﻿var CLIENT_ID = '771856282138-00rp1uuivt02fkl6kb2hc2fcq0ld0o28.apps.googleusercontent.com';
 var SCOPES = 'https://www.googleapis.com/auth/drive';
+
+function utf8_to_b64(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
+
+function b64_to_utf8(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+}
+
 /**
  * Called when the client library is loaded to start the auth flow.
  */
@@ -156,7 +165,7 @@ function insertFile(fileName, dataToSave,id) {
     };
    
     var finishInsertion = function () {
-        var base64Data = btoa(dataToSave);
+        var base64Data = utf8_to_b64(dataToSave);
         var multipartRequestBody =
             delimiter +
             'Content-Type: application/json\r\n\r\n' +
