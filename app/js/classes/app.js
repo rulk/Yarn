@@ -1188,4 +1188,12 @@ var App = function(name, version)
 	        });
 	    });
 	}
+
+	this.generateNodeDescription = function (item) {
+	    
+        if(item.niceDescription != undefined)
+	        return item.niceDescription();  
+
+	    return "??";
+	}
 }

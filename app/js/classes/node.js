@@ -41,11 +41,10 @@ var InventoryCondition = function()
 var Answer = function()
 {
     var self = this;
-    this.msg = ko.observable();
     this.ref = ko.observable();
 }
 var NodeRename = ko.observable();
-var Node = function()
+var Node = function(initialTitle)
 {
 	var self = this;
 
@@ -53,7 +52,7 @@ var Node = function()
 
 	// primary values
 	this.index = ko.observable(globalNodeIndex++);
-	this.title = ko.observable("Node" + this.index());
+	this.title = ko.observable((initialTitle) ? initialTitle : "Node" + this.index());
 	this.tags = ko.observable("")
 	this.body = ko.observable("Empty Text");
 	this.presenter = ko.observable();
@@ -462,6 +461,17 @@ var Node = function()
 			return 1;
 		}
 	}
+	this.niceDescription = function () {
+	    var presenter = "Answer";
+	    if (self.presenter()) presenter = self.presenter();
+	    return presenter + ":" + self.body().substring(0, 10) + (self.body().length > 10 ? "..." : "") + "(" + self.title() + ")";
+	}
+
+	this.formatTitle = function () {
+	    if (self.presenter()) return self.presenter() +":"+self.title();
+	    return "Answer:" + self.title();
+	}
+
 }
 
 ko.bindingHandlers.nodeBind = 

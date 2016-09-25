@@ -151,6 +151,7 @@ a:hover { color: #000;}
     float:none;
     display:block;
     padding:10px;
+    text-transform:none;
 }
 
 .app-menu .menu:first-child {

@@ -254,10 +254,11 @@ var data =
 		var numAvg = 0;
 		for (var i = 0; i < objects.length; i ++)
 		{
-			var node = new Node();
+		    var object = objects[i]
+		    var node = new Node(object.title);
 			app.nodes.push(node);
 			
-			var object = objects[i]
+			
 			if (object.title != undefined)
 				node.title(object.title);
 			if (object.body != undefined)
@@ -313,7 +314,6 @@ var data =
 			if (object.answers != undefined) {
 			    for (var c = 0; c < object.answers.length; c++) {
 			        var answer = new Answer();
-			        answer.msg(object.answers[c].msg);
 			        answer.ref(object.answers[c].ref);
 			        node.answers.push(answer);
 			    }

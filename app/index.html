@@ -114,7 +114,7 @@
 			<div class="nodes">
 				<div class="nodes-holder" data-bind="foreach: { data: app.nodes, as: 'node' }">
 					<div class="node" data-bind="nodeBind: true, css: { inactive: !node.active()}" >
-						<div class="title" data-bind="text: node.title, style: {background:
+						<div class="title" data-bind="text: node.formatTitle(), style: {background:
 						node.colorID() == 1 ? '#6EA5E0' :
 						node.colorID() == 2 ? '#9EDE74' :
 						node.colorID() == 3 ? '#FFE374' :
@@ -186,9 +186,8 @@
                             <h4>Answers (Text | Node to link to)</h4>
                             <div data-bind="foreach: app.editing().answers">
                                 <div class="one-answer">
-                                    <input data-bind='value: msg ,  valueUpdate: ["afterkeydown","input"]' />
-                                   <!-- <input data-bind='value: ref,  valueUpdate: ["afterkeydown","input"]' />-->
-                                    <select data-bind="options: app.nodes, optionsText: 'title', value: ref, optionsCaption: '', optionsValue: 'title'">
+                                   
+                                    <select data-bind="options: app.nodes, optionsText:  app.generateNodeDescription , value: ref, optionsCaption: '', optionsValue: 'title'">
 
                                     </select>
                                     <div><a href='#' data-bind='click: app.editing().removeAnswer'>Delete</a></div>
