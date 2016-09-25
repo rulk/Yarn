@@ -18,6 +18,7 @@
 		<script type="text/javascript" src="js/libs/spellcheck_ace.js"></script>
 		<script type="text/javascript" src="js/libs/theme-yarn.js"></script>
 		<script type="text/javascript" src="js/libs/mode-yarn.js"></script>
+        <script type="text/javascript" src="js/libs/FileSaver.js"></script>
 
 		<!-- various models / classes -->
 		<script type="text/javascript" src="js/classes/app.js"></script>
@@ -25,7 +26,7 @@
 		<script type="text/javascript" src="js/classes/utils.js"></script>
 		<script type="text/javascript" src="js/classes/node.js"></script>
         <script type="text/javascript" src="js/classes/gdrive.js"></script>
-      
+        
         <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
         
 	</head>
@@ -95,9 +96,9 @@
 					<div class="dropdown">
 						<span class="item" data-bind="click: data.tryOpenFile">Open...</span>
 						<!--<span class="item" data-bind="click: data.tryOpenFolder">Open Folder...</span>-->
-						<span class="item" data-bind="click: data.tryAppend">Append...</span>
+						<!--<span class="item" data-bind="click: data.tryAppend">Append...</span>-->
 						<!-- ko if:data.editingPath() != null -->
-						<span class="item" data-bind="click: data.trySaveCurrent">Save</span>
+						<!--<span class="item" data-bind="click: data.trySaveCurrent">Save</span>-->
 						<!-- /ko -->
 						<span class="item" data-bind="click: function() { data.trySave(false); }">Save As Json...</span>
 						<!--<span class="item" data-bind="click: app.quit">Close</span>-->

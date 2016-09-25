@@ -7,7 +7,7 @@ var data =
 	editingType: ko.observable(""),
 	editingFolder: ko.observable(null),
 
-	readFile: function(e, filename, clearNodes)
+	readFile: function(e, filename, clearNodes, fileObj)
 	{
 		if (app.fs != undefined)
 		{
@@ -31,14 +31,29 @@ var data =
 				}
 			}));
 		}
-		else
+		else if (fileObj)
 		{
+		    var file = fileObj.files[0];
+		    var fr = new FileReader();
+		    fr.onload = function (event) {
+		        var text = event.target.result;
+		        var name = file.name;
+		        if (name.lastIndexOf('.') != -1) {
+		            name = name.substr(0, name.lastIndexOf('.'));
+		        }
+		        data.editingPath(name);
+		        data.editingType(FILETYPE.JSON);
+		        data.editingFileId(null);
+		        data.loadData(text, FILETYPE.JSON, clearNodes);
+		    };
+		    fr.readAsText(file);
+
 		    //alert("Unable to load file from your browser");
-		    $.get("/test.json", function (txtData) {
+		    /*$.get("/test.json", function (txtData) {
 		        data.editingPath("test.json");
 		        data.editingType(FILETYPE.JSON);
 		        data.loadData(txtData, FILETYPE.JSON, clearNodes);
-		    });
+		    });*/
 		}
 		/*
 		else if (window.File && window.FileReader && window.FileList && window.Blob && e.target && e.target.files && e.target.files.length > 0)
@@ -62,9 +77,9 @@ var data =
 		
 	},
 
-	openFile: function(e, filename)
+	openFile: function(e, filename, fileObj)
 	{
-		data.readFile(e, filename, true);
+		data.readFile(e, filename, true, fileObj);
 
 		app.refreshWindowTitle(filename);
 	},
@@ -437,7 +452,7 @@ var data =
 		dialog.bind("change", function(e)
 		{
 			// make callback
-			callback(e, dialog.val());
+			callback(e, dialog.val(), dialog[0]);
 
 			// replace input field with a new identical one, with the value cleared
 			// (html can't edit file field values)
@@ -471,18 +486,27 @@ var data =
 		}
 		else
 		{
-			switch(type) {
-				case 'json':
-					content = "data:text/json," + content;
-					break;
-				case 'xml':
-					content = "data:text/xml," + content;
-					break;
-				default:
-					content = "data:text/plain," + content;
-					break;
-			}
-			window.open(content, "_blank");
+		    var isFileSaverSupported = false;
+		    try {
+		        isFileSaverSupported = !!new Blob;
+		    } catch (e) { }
+		    if (isFileSaverSupported && type == 'json') {
+		        var blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+		        saveAs(blob, data.editingPath()+".json");
+		    } else {
+		        switch (type) {
+		            case 'json':
+		                content = "data:text/json," + content;
+		                break;
+		            case 'xml':
+		                content = "data:text/xml," + content;
+		                break;
+		            default:
+		                content = "data:text/plain," + content;
+		                break;
+		        }
+		        window.open(content, "_blank");
+		    }
 		}
 	},
 
