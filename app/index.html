@@ -82,18 +82,12 @@
 				<div class="menu">
 					<span class="title" data-bind="click:app.newNode">+ Node</span>
 				</div>
-                
-                <div class="menu">
-                    <span class="title" data-bind="click:app.showFileList">Drive Files</span>
-                </div>
-                
-                <div class="menu">
-                    <span class="title" data-bind="click:app.Play">Play</span>
-                </div>
+                              
 
 				<div class="menu">
 					<span class="title">File</span>
 					<div class="dropdown">
+                        <span class="item" data-bind="click: function(){location.reload();}">New</span>
 						<span class="item" data-bind="click: data.tryOpenFile">Open...</span>
 						<!--<span class="item" data-bind="click: data.tryOpenFolder">Open Folder...</span>-->
 						<!--<span class="item" data-bind="click: data.tryAppend">Append...</span>-->
@@ -104,6 +98,14 @@
 						<!--<span class="item" data-bind="click: app.quit">Close</span>-->
 					</div>
 				</div>
+
+                <div class="menu">
+                    <span class="title" data-bind="click:app.showFileList">Drive Files</span>
+                </div>
+
+                <div class="menu">
+                    <span class="title" data-bind="click:app.Play">Play</span>
+                </div>
 			</div>
 
 			<!-- arrow bg canvas for linked nodes -->
