@@ -1126,6 +1126,7 @@ var App = function(name, version)
 
 	this.showFileList = function()
 	{
+	    self.avaliableFiles.removeAll();
 	    $(".file-list").show();
 	    loadFileList(function (data) {
 	        self.avaliableFiles.removeAll();

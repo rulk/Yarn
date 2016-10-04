@@ -48,6 +48,8 @@
 			
 			</div>
             <div class="drive-save" >
+                <input type="button" data-bind="click: changeDefaultFolder, value: data.parentFolderName" />
+               
                 <input type="text" id="drive-file-name" placeholder="File Name" class="save-field" data-bind="value: data.editingPath, disable: data.editingFileId() != null" />
                 <input type="button" id="doitButton" style="display: none" value="SAVE TO DRIVE"  data-bind="click: function() { data.trySave(true); }"/>
                 <input type="button" id="authorizeButton" style="display: none" value="AUTHORIZE IN DRIVE" />
@@ -87,14 +89,16 @@
 				<div class="menu">
 					<span class="title">File</span>
 					<div class="dropdown">
+                        
                         <span class="item" data-bind="click: function(){location.reload();}">New</span>
-						<span class="item" data-bind="click: data.tryOpenFile">Open...</span>
+						<span class="item" data-bind="click: data.tryOpenFile">Open...</span>                        
 						<!--<span class="item" data-bind="click: data.tryOpenFolder">Open Folder...</span>-->
 						<!--<span class="item" data-bind="click: data.tryAppend">Append...</span>-->
 						<!-- ko if:data.editingPath() != null -->
 						<!--<span class="item" data-bind="click: data.trySaveCurrent">Save</span>-->
 						<!-- /ko -->
 						<span class="item" data-bind="click: function() { data.trySave(false); }">Save As Json...</span>
+                        
 						<!--<span class="item" data-bind="click: app.quit">Close</span>-->
 					</div>
 				</div>

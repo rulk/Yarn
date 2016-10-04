@@ -1,5 +1,10 @@
 ﻿var CLIENT_ID = '771856282138-00rp1uuivt02fkl6kb2hc2fcq0ld0o28.apps.googleusercontent.com';
 var SCOPES = 'https://www.googleapis.com/auth/drive';
+var developerKey = 'AIzaSyD7ZYeX3P2d1m4iYq69IOrX8KnLrwr609w';
+
+var oauthToken;
+
+
 
 function utf8_to_b64(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
@@ -15,7 +20,7 @@ function b64_to_utf8(str) {
 function handleClientLoad() {
     // window.setTimeout(checkAuth, 1);
     gapi.load('client:auth', checkAuth);
-   
+    gapi.load('picker');
 }
 /**
  * Check if the current user has authorized the application.
@@ -50,6 +55,8 @@ function handleAuthResult(authResult) {
     if (authResult && !authResult.error) {
         // Access token has been successfully retrieved, requests can be sent to the API.
         doitButton.style.display = 'inline';
+        oauthToken = authResult.access_token;
+        loadParentFolder();
        // doitButton.onclick = uploadFile;
     } else {
         // No access token could be retrieved, show the button to start the authorization flow.
@@ -61,6 +68,25 @@ function handleAuthResult(authResult) {
         };
     }
 }
+
+function loadParentFolder()
+{
+    if (localStorage.parentFolderId)
+    {
+        data.parentFolder({ id: localStorage.parentFolderId, isRoot: false });
+    }
+    else
+    {
+        data.parentFolder({ id: "0ByJTpfA7G5rkVFRCMEZqaUliekk", isRoot: false });
+    }
+    data.parentFolder.subscribe(function (newValue) {
+        if(newValue && newValue.id)
+        {
+            localStorage.parentFolderId = newValue.id;
+        }
+    });
+}
+
 
 function loadFromGDrive(id,title,url) {
     downloadFile(url, function (contents) {
@@ -95,7 +121,7 @@ function downloadFile(url, callback) {
 }
 function loadFileList(onFinish)
 {
-    retrieveAllFilesInFolder("0ByJTpfA7G5rkVFRCMEZqaUliekk", function (data) {
+    retrieveAllFilesInFolder(data.parentFolder().id, function (data) {
         
         var batch = new gapi.client.newBatch();
         for (var d = 0; d < data.length; d++)
@@ -123,6 +149,7 @@ function loadFileList(onFinish)
  *
  */
 function retrieveAllFilesInFolder(folderId, callback) {
+    var q = 'trashed = false and mimeType = "application/json"';
     var retrievePageOfChildren = function (request, result) {
         request.execute(function (resp) {
             result = result.concat(resp.items);
@@ -131,7 +158,7 @@ function retrieveAllFilesInFolder(folderId, callback) {
                 request = gapi.client.drive.children.list({
                     'folderId': folderId,
                     'pageToken': nextPageToken,
-                    'trashed':false
+                    'q': q
                 });
                 retrievePageOfChildren(request, result);
             } else {
@@ -140,7 +167,8 @@ function retrieveAllFilesInFolder(folderId, callback) {
         });
     }
     var initialRequest = gapi.client.drive.children.list({
-        'folderId': folderId
+        'folderId': folderId,
+        'q': q
     });
     retrievePageOfChildren(initialRequest, []);
 }
@@ -159,8 +187,8 @@ function insertFile(fileName, dataToSave,id) {
         'mimeType': contentType,
         'parents': [{
             "kind": "drive#parentReference",
-            "id": "0ByJTpfA7G5rkVFRCMEZqaUliekk",
-            "isRoot": false
+            "id": data.parentFolder().id,
+            "isRoot": data.parentFolder().isRoot
         }]
     };
    
@@ -204,4 +232,38 @@ function insertFile(fileName, dataToSave,id) {
     {
         finishInsertion();
     }
+}
+
+// Create and render a Picker object for picking user Photos.
+function changeDefaultFolder() {
+    if (oauthToken) {
+        var docsView = new google.picker.DocsView()
+          .setIncludeFolders(true)
+          .setMimeTypes('application/vnd.google-apps.folder')
+          .setSelectFolderEnabled(true);
+
+        var picker = new google.picker.PickerBuilder().
+            addView(docsView).
+            setOAuthToken(oauthToken).
+            setDeveloperKey(developerKey).
+            setCallback(pickerCallback).
+            build();
+        picker.setVisible(true);
+    }
+}
+
+// A simple callback implementation.
+function pickerCallback(docData) {
+    var url = 'nothing';
+    if (docData[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+        var doc = docData[google.picker.Response.DOCUMENTS][0];
+        url = doc[google.picker.Document.URL];
+        id = doc[google.picker.Document.ID];
+        isRoot = false;
+
+        data.parentFolder({ id: id, isRoot: isRoot });
+    }
+    console.log(docData[google.picker.Response.ACTION]);
+    var message = 'You picked: ' + url;
+  // alert( message);
 }

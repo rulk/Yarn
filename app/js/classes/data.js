@@ -5,7 +5,9 @@ var data =
     editingPath: ko.observable(null),
     editingFileId : ko.observable(null),
 	editingType: ko.observable(""),
-	editingFolder: ko.observable(null),
+	parentFolder: ko.observable(),
+
+	parentFolderName: ko.observable(),
 
 	readFile: function(e, filename, clearNodes, fileObj)
 	{
@@ -82,12 +84,6 @@ var data =
 		data.readFile(e, filename, true, fileObj);
 
 		app.refreshWindowTitle(filename);
-	},
-
-	openFolder: function(e, foldername)
-	{
-		editingFolder = foldername;
-		alert("openFolder not yet implemented e: " + e + " foldername: " + foldername);
 	},
 
 	appendFile: function(e, filename)
@@ -548,3 +544,15 @@ var data =
 	}
 
 }
+
+data.parentFolder.subscribe(function (newValue) {
+    if(newValue){
+        gapi.client.drive.files.get({
+            'fileId': newValue.id
+        }).execute(function (meta) {
+            data.parentFolderName(meta.title + "/");
+           
+        });
+        
+    }
+});
