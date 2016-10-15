@@ -181,15 +181,18 @@ function insertFile(fileName, dataToSave,id) {
     const delimiter = "\r\n--" + boundary + "\r\n";
     const close_delim = "\r\n--" + boundary + "--";
   
+    var makeParentsFunc = function () {
+        return  [{
+            "kind": "drive#parentReference",
+            "id": data.parentFolder().id,
+            "isRoot": data.parentFolder().isRoot
+        }];
+    };
     var contentType = 'application/json';
     var metadata = {
         'title': fileName,
         'mimeType': contentType,
-        'parents': [{
-            "kind": "drive#parentReference",
-            "id": data.parentFolder().id,
-            "isRoot": data.parentFolder().isRoot
-        }]
+        'parents': makeParentsFunc()
     };
    
     var finishInsertion = function () {
@@ -225,6 +228,8 @@ function insertFile(fileName, dataToSave,id) {
             'fileId': id
         }).execute(function (meta) {
             metadata = meta;
+            metadata['title'] = fileName;
+            metadata['parents'] = makeParentsFunc();
             finishInsertion();
         });
     }

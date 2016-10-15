@@ -132,7 +132,7 @@ var App = function(name, version)
 			var MarqueeSelection = [];
 			var MarqRect = {x1:0,y1:0,x2:0,y2:0};
 			var MarqueeOffset = [0, 0];
-
+			var last_position = null;
 			$(".nodes").on("mousedown", function(e)
 			{
 				$("#marquee").css({x:0, y:0, width:0, height:0});
@@ -146,11 +146,13 @@ var App = function(name, version)
 
 				MarqueeOffset[0] = 0;
 				MarqueeOffset[1] = 0;
-
+				last_position = { x: e.clientX, y: e.clientY };
 				if (!e.altKey && !e.shiftKey)
 					self.deselectAllNodes();
 			});
 
+			
+			
 			$(".nodes").on("mousemove", function(e)
 			{
 				
@@ -168,15 +170,24 @@ var App = function(name, version)
 						}
 						else
 						{
-							self.transformOrigin[0] += e.pageX - offset.x;
-							self.transformOrigin[1] += e.pageY - offset.y;
+						    if (typeof (last_position.x) != 'undefined') {
+						        //get the change from last position to this position
+						        var deltaX = last_position.x - event.clientX,
+                                    deltaY = last_position.y - event.clientY;
+						        last_position.x = event.clientX;
+						        last_position.y = event.clientY;
+						        self.transformOrigin[0] -= deltaX;
+						        self.transformOrigin[1] -= deltaY;
+						        self.translateInstant();
+						    }
 
-							self.translate();
+						    
 
+						    /*
 							offset.x = e.pageX;
 							offset.y = e.pageY;
 
-							/*
+							
 							var nodes = self.nodes();
 							for (var i in nodes)
 							{
@@ -1006,7 +1017,7 @@ var App = function(name, version)
 		self.translate(200);
 	}
 
-	this.translate = function(speed)
+	/*this.translate = function(speed)
 	{
 		$(".nodes-holder").transition({
 			transform: (
@@ -1018,6 +1029,14 @@ var App = function(name, version)
 				")"
 			)
 		}, speed || 0);
+	}*/
+	this.translate = function (speed) {
+	    $(".nodes-holder").css('transform', "matrix(" +
+					self.cachedScale + ",0,0," +
+					self.cachedScale + "," +
+					self.transformOrigin[0] + "," +
+					self.transformOrigin[1] +
+				")");
 	}
 
 	this.arrangeGrid = function()

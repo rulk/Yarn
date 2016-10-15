@@ -50,7 +50,7 @@
             <div class="drive-save" >
                 <input type="button" data-bind="click: changeDefaultFolder, value: data.parentFolderName" />
                
-                <input type="text" id="drive-file-name" placeholder="File Name" class="save-field" data-bind="value: data.editingPath, disable: data.editingFileId() != null" />
+                <input type="text" id="drive-file-name" placeholder="File Name" class="save-field" data-bind="value: data.editingPath" />
                 <input type="button" id="doitButton" style="display: none" value="SAVE TO DRIVE"  data-bind="click: function() { data.trySave(true); }"/>
                 <input type="button" id="authorizeButton" style="display: none" value="AUTHORIZE IN DRIVE" />
             </div>
